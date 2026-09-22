@@ -10,6 +10,7 @@ import pg from "pg";
 const host = process.env.HOST || "0.0.0.0";
 const port = Number(process.env.PORT || 8080);
 if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required");
+pg.types.setTypeParser(1082, (v) => v); // DATE 保持 YYYY-MM-DD 字符串，避开 Date->UTC 平移
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, max: 5 });
 
 const clientRoot = fileURLToPath(new URL("./dist/", import.meta.url));
@@ -149,8 +150,12 @@ async function api(req, res, url) {
          returning checkin_date, subject, status`, [date, body.subject, body.status]);
       return json(res, 200, { date, subject: body.subject, status: body.status, saved });
     }
-    if (p.startsWith("/api/")) return json(res, 405, { error: "method_not_allowed" });
+    if (["/api/today", "/api/day", "/api/calendar", "/api/stats", "/api/checkin"].includes(p)) {
+      res.setHeader("allow", p === "/api/checkin" ? "POST" : "GET");
+      return json(res, 405, { error: "method_not_allowed" });
+    }
     return json(res, 404, { error: "not_found" });
+
   } catch (error) {
     console.error("api error", error?.code || error?.message);
     return json(res, 503, { error: "database_unavailable" });

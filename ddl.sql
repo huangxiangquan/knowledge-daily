@@ -14,7 +14,11 @@ CREATE TABLE IF NOT EXISTS cards (
   created_at   timestamptz  NOT NULL DEFAULT now(),
   updated_at   timestamptz  NOT NULL DEFAULT now()
 );
-CREATE UNIQUE INDEX IF NOT EXISTS cards_day_subject_position_uq ON cards (day_num, subject, position);
+-- 唯一键必须含 section：一天内 概念/例题/练习A/练习B 都有 position=1 起，
+-- 只按 (day_num,subject,position) 会让概念与例题互相吞掉（实测丢一半内容）。
+CREATE UNIQUE INDEX IF NOT EXISTS cards_day_subject_section_position_uq
+  ON cards (day_num, subject, section, position);
+
 CREATE INDEX IF NOT EXISTS cards_date_subject_idx ON cards (card_date, subject, section, position);
 
 CREATE TABLE IF NOT EXISTS checkins (
