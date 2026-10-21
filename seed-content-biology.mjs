@@ -4,7 +4,7 @@
 
 export const biology = [
   {
-    day: 3,
+    day: 1,
     blocks: [
       {
         section: "concept", position: 1, title: "为什么一切从细胞开始",
@@ -28,7 +28,7 @@ export const biology = [
     ],
   },
   {
-    day: 4,
+    day: 2,
     blocks: [
       {
         section: "concept", position: 1, title: "细胞膜：会流动的城墙",
@@ -52,7 +52,7 @@ export const biology = [
     ],
   },
   {
-    day: 5,
+    day: 3,
     blocks: [
       {
         section: "concept", position: 1, title: "过境的三种方式：扩散、协助、主动",
@@ -76,7 +76,7 @@ export const biology = [
     ],
   },
   {
-    day: 6,
+    day: 4,
     blocks: [
       {
         section: "concept", position: 1, title: "细胞器：一座城市的部门地图",
@@ -100,7 +100,7 @@ export const biology = [
     ],
   },
   {
-    day: 7,
+    day: 5,
     blocks: [
       {
         section: "concept", position: 1, title: "线粒体：三道工序的发电厂",
@@ -124,7 +124,7 @@ export const biology = [
     ],
   },
   {
-    day: 8,
+    day: 6,
     blocks: [
       {
         section: "concept", position: 1, title: "细胞核与中心法则：图纸、抄录与施工",
@@ -148,7 +148,7 @@ export const biology = [
     ],
   },
   {
-    day: 9,
+    day: 7,
     blocks: [
       {
         section: "concept", position: 1, title: "有丝分裂：一分二的精确复制",

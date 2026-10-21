@@ -7,56 +7,6 @@ export const physics = [
     day: 1,
     blocks: [
       {
-        section: "concept", position: 1, title: "位移 ≠ 路程",
-        terms: "displacement（位移）· distance（路程）· scalar/vector（标量/矢量）",
-        body: "- 路程 `d` 是走过的轨迹长度，只有大小；位移 `\u0394x = x_f - x_i` 有方向，是状态变化量。\n- 全程单向直线运动时二者数值相等；一旦折返，路程一定大于位移的大小。\n- 常见误区：把 `-5 m` 读成「比 0 小 5 米」。负号只表示方向，不代表「更少」。",
-      },
-      {
-        section: "example", position: 1, title: "沿 x 轴折返",
-        body: "一个探针从原点出发，沿 +x 走到 `x = 12 m`，再退回 `x = 3 m`，全程用时 15 s。\n求：(a) 路程；(b) 位移；(c) 平均速度；(d) 平均速率。",
-        answer: "- (a) 路程 = 12 + 9 = **21 m**（退回段是 12 \u2212 3 = 9）\n- (b) 位移 = 3 \u2212 0 = **+3 m**\n- (c) 平均速度 = 位移 / 时间 = 3 / 15 = **0.20 m/s，方向 +x**\n- (d) 平均速率 = 路程 / 时间 = 21 / 15 = **1.4 m/s**\n- 得分点：(c) 用位移，(d) 用路程。AP 选择题最爱在这里设陷阱。",
-      },
-      {
-        section: "practice", position: 1, title: "练习 A（同型）",
-        body: "电梯从 1 楼（`y = 0`）升到 6 楼（`y = 15 m`）又降到 3 楼（`y = 6 m`），共用 30 s。求位移与平均速度。",
-        answer: "位移 = **+6 m**；平均速度 = 6 / 30 = **+0.20 m/s（向上）**。注意路程是 15 + 9 = 24 m，别混用。",
-      },
-      {
-        section: "practice", position: 2, title: "练习 B（变式）",
-        body: "若某物体在某段时间内位移为 0，能不能断定它一直没动？用一句话说明，并举一个反例。",
-        answer: "不能。位移只看首末位置，绕一圈回到原点位移就是 0，而路程不为 0。反例：椭圆形跑道跑完一整圈。",
-      },
-    ],
-  },
-  {
-    day: 2,
-    blocks: [
-      {
-        section: "concept", position: 1, title: "加速度的方向由速度变化量决定",
-        terms: "velocity（速度）· acceleration（加速度）· deceleration（减速，非正式说法）",
-        body: "- 定义：`a = \u0394v / \u0394t`，是矢量。**加速度方向 = \u0394v 的方向**，不是「运动方向」。\n- 速度为正、加速度为负 → 物体向 +x 减速；两者同号 → 加速。\n- 快速判断法：看 `v` 与 `a` 的符号是否相同，同号越跑越快，异号越来越慢。",
-      },
-      {
-        section: "example", position: 1, title: "刹车过程",
-        body: "小车以 `v = 18 m/s` 匀速行驶，踩刹车后经过 `6 s` 停下。求刹车期间加速度；若加速度恒定，求刹车距离。",
-        answer: "- `a = (0 \u2212 18) / 6 = **-3.0 m/s\u00b2**`，负号说明方向与运动方向相反\n- 距离用平均速度最省事：`(18 + 0) / 2 \u00d7 6 = **54 m**`\n- 也可用 `v\u00b2 = v\u2080\u00b2 + 2a\u0394x`：`0 = 18\u00b2 + 2(\u22123)\u0394x` \u2192 `\u0394x = 54 m`，两条路要能互相验算。",
-      },
-      {
-        section: "practice", position: 1, title: "练习 A（同型）",
-        body: "雨滴以 `9 m/s` 竖直下落（向下为正），受到向上风力后用 `3 s` 减到 `3 m/s`。求加速度。",
-        answer: "`a = (3 \u2212 9) / 3 = **-2.0 m/s\u00b2**`，方向向上。数值为负不代表算错，代表与正方向相反。",
-      },
-      {
-        section: "practice", position: 2, title: "练习 B（概念陷阱）",
-        body: "某时刻物体的速度为 0，它的加速度一定为 0 吗？举一个反例。",
-        answer: "不一定。竖直上抛到最高点时 `v = 0`，但加速度仍是 `g \u2248 9.8 m/s\u00b2` 向下——否则它就停在那里不掉了。",
-      },
-    ],
-  },
-  {
-    day: 3,
-    blocks: [
-      {
         section: "concept", position: 1, title: "运动「不需要原因」——惯性的世界",
         terms: "inertia（惯性）· reference frame（参考系）· natural state（自然状态）",
         body: "- 从今天起换一个问题：不再问「怎么动」（运动学），改问「**是什么支配运动的变化**」。\n- 伽利略的大船思想实验：船匀速直线开时，舱里滚小球和陆地上**没有任何区别**。他想通了一件事——\n- **「运动」本身不需要原因**。匀速直线运动和静止一样，是一种「自然状态」，不需要力来维持。\n- 直觉为什么相反？因为地面上摩擦无处不在，你从没见过真正不受力的东西。",
@@ -78,7 +28,7 @@ export const physics = [
     ],
   },
   {
-    day: 4,
+    day: 2,
     blocks: [
       {
         section: "concept", position: 1, title: "合力为零：第一定律的日常形态",
@@ -102,7 +52,7 @@ export const physics = [
     ],
   },
   {
-    day: 5,
+    day: 3,
     blocks: [
       {
         section: "concept", position: 1, title: "F=ma 是宇宙的承诺，不是定义",
@@ -126,7 +76,7 @@ export const physics = [
     ],
   },
   {
-    day: 6,
+    day: 4,
     blocks: [
       {
         section: "concept", position: 1, title: "受力图纪律：只画有施力者的力",
@@ -150,7 +100,7 @@ export const physics = [
     ],
   },
   {
-    day: 7,
+    day: 5,
     blocks: [
       {
         section: "concept", position: 1, title: "作用与反作用：双胞胎不住在一起",
@@ -174,7 +124,7 @@ export const physics = [
     ],
   },
   {
-    day: 8,
+    day: 6,
     blocks: [
       {
         section: "concept", position: 1, title: "马拉车悖论：内力推不动整体",
@@ -198,7 +148,7 @@ export const physics = [
     ],
   },
   {
-    day: 9,
+    day: 7,
     blocks: [
       {
         section: "concept", position: 1, title: "合拢：动量守恒不是新的定律",
@@ -223,7 +173,7 @@ export const physics = [
   },
 
   {
-    day: 10,
+    day: 8,
     blocks: [
       {
         section: "concept", position: 1, title: "什么时候机械能守恒",
@@ -248,7 +198,7 @@ export const physics = [
     ],
   },
   {
-    day: 11,
+    day: 9,
     blocks: [
       {
         section: "concept", position: 1, title: "圆周运动：向心加速度不是新类型力",
@@ -273,7 +223,7 @@ export const physics = [
     ],
   },
   {
-    day: 12,
+    day: 10,
     blocks: [
       {
         section: "concept", position: 1, title: "动量、冲量与碰撞分类",
@@ -298,7 +248,7 @@ export const physics = [
     ],
   },
   {
-    day: 13,
+    day: 11,
     blocks: [
       {
         section: "concept", position: 1, title: "万有引力与轨道速度",
@@ -323,7 +273,7 @@ export const physics = [
     ],
   },
   {
-    day: 14,
+    day: 12,
     blocks: [
       {
         section: "concept", position: 1, title: "本周方法清单（考试当天照做）",

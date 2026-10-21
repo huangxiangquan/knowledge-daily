@@ -4,7 +4,7 @@
 
 export const chemistry = [
   {
-    day: 3,
+    day: 1,
     blocks: [
       {
         section: "concept", position: 1, title: "高中化学全景图：四块拼图怎么拼",
@@ -28,7 +28,7 @@ export const chemistry = [
     ],
   },
   {
-    day: 4,
+    day: 2,
     blocks: [
       {
         section: "concept", position: 1, title: "物质的量：化学的「打」",
@@ -52,7 +52,7 @@ export const chemistry = [
     ],
   },
   {
-    day: 5,
+    day: 3,
     blocks: [
       {
         section: "concept", position: 1, title: "周期表：一张按电子排布排座位的地图",
@@ -76,7 +76,7 @@ export const chemistry = [
     ],
   },
   {
-    day: 6,
+    day: 4,
     blocks: [
       {
         section: "concept", position: 1, title: "化学键：粘住原子的三种方式",
@@ -100,7 +100,7 @@ export const chemistry = [
     ],
   },
   {
-    day: 7,
+    day: 5,
     blocks: [
       {
         section: "concept", position: 1, title: "氧化还原：一场电子的交接仪式",
@@ -124,7 +124,7 @@ export const chemistry = [
     ],
   },
   {
-    day: 8,
+    day: 6,
     blocks: [
       {
         section: "concept", position: 1, title: "电解质与离子方程式：删掉观众，只留主角",
@@ -148,7 +148,7 @@ export const chemistry = [
     ],
   },
   {
-    day: 9,
+    day: 7,
     blocks: [
       {
         section: "concept", position: 1, title: "速率与平衡：化学的「交通规则」",
