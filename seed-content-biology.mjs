@@ -1,6 +1,6 @@
 export const biology = [
  {
-  "day": 3,
+  "day": 1,
   "blocks": [
    {
     "section": "concept",
@@ -32,7 +32,7 @@ export const biology = [
   ]
  },
  {
-  "day": 4,
+  "day": 2,
   "blocks": [
    {
     "section": "concept",
@@ -64,7 +64,7 @@ export const biology = [
   ]
  },
  {
-  "day": 5,
+  "day": 3,
   "blocks": [
    {
     "section": "concept",
@@ -96,7 +96,7 @@ export const biology = [
   ]
  },
  {
-  "day": 6,
+  "day": 4,
   "blocks": [
    {
     "section": "concept",
@@ -128,7 +128,7 @@ export const biology = [
   ]
  },
  {
-  "day": 7,
+  "day": 5,
   "blocks": [
    {
     "section": "concept",
@@ -160,7 +160,7 @@ export const biology = [
   ]
  },
  {
-  "day": 8,
+  "day": 6,
   "blocks": [
    {
     "section": "concept",
@@ -192,7 +192,7 @@ export const biology = [
   ]
  },
  {
-  "day": 9,
+  "day": 7,
   "blocks": [
    {
     "section": "concept",
