@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 
-type Subject = "physics" | "math";
+type Subject = "physics" | "math" | "biology" | "chemistry";
 type Section = "concept" | "example" | "practice";
 type CheckinStatus = "done" | "shaky";
 
@@ -25,10 +25,8 @@ interface DayPayload {
 interface CalendarDay {
   date: string;
   weekday: string;
-  physics: boolean;
-  math: boolean;
-  physics_status: CheckinStatus | null;
-  math_status: CheckinStatus | null;
+  has: Record<Subject, boolean>;
+  status: Record<Subject, CheckinStatus | null>;
 }
 
 interface CalendarPayload {
@@ -46,12 +44,14 @@ interface StatsPayload {
   streak: number;
   shaky_count: number;
   weak_topics: { label: string; count: number }[];
-  series: { date: string; physics: CheckinStatus | null; math: CheckinStatus | null }[];
+  series: ({ date: string } & Record<Subject, CheckinStatus | null>)[];
 }
 
 const SUBJECTS: { key: Subject; zh: string; en: string }[] = [
-  { key: "physics", zh: "物理", en: "AP Physics 1" },
-  { key: "math", zh: "数学", en: "AP Precalculus" },
+  { key: "physics", zh: "物理", en: "Physics" },
+  { key: "math", zh: "数学", en: "Math" },
+  { key: "biology", zh: "生物", en: "Biology" },
+  { key: "chemistry", zh: "化学", en: "Chemistry" },
 ];
 
 const SECTION_LABEL: Record<Section, string> = {
@@ -189,7 +189,7 @@ export function App() {
         if (!active) return;
         setLoadError(null);
         setDay(payload);
-        const total = payload.subjects.physics.length + payload.subjects.math.length;
+        const total = SUBJECTS.reduce((n, { key }) => n + (payload.subjects[key]?.length ?? 0), 0);
         if (!total) {
           setNotice("这一天的卡片还没生成。用上方日期条回看已经发布的日子。");
         }
@@ -242,7 +242,7 @@ export function App() {
       <header className="masthead">
         <div className="masthead__top">
           <p className="brand">
-            数理日报 <b>DAILY PHYSICS &amp; MATH</b> · 高一 · 国际课程
+            学习日报 <b>DAILY SCIENCE &amp; MATH</b> · 高一 · 国际课程
           </p>
           <div className="viewswitch" role="group" aria-label="视图切换">
             <button type="button" aria-pressed={view === "day"} onClick={() => setView("day")}>今日卡片</button>
@@ -275,8 +275,9 @@ export function App() {
               <span className="strip__dow">{row.weekday}</span>
               <span className="strip__num">{dayOfMonth(row.date)}</span>
               <span className="strip__marks">
-                <span className="strip__mark" data-s="physics" data-v={row.physics_status ?? (row.physics ? "empty" : "none")} />
-                <span className="strip__mark" data-s="math" data-v={row.math_status ?? (row.math ? "empty" : "none")} />
+                {SUBJECTS.map(({ key }) => (
+                  <span key={key} className="strip__mark" data-s={key} data-v={row.status[key] ?? (row.has[key] ? "empty" : "none")} />
+                ))}
               </span>
             </button>
           ))}
@@ -376,12 +377,13 @@ export function App() {
                   <div className="metric"><div className="metric__k">连续</div><div className="metric__v">{stats.streak}</div><div className="metric__k">天</div></div>
                   <div className="metric"><div className="metric__k">标记不确定</div><div className="metric__v">{stats.shaky_count}</div><div className="metric__k">次</div></div>
                 </div>
-                <p className="panel__title" style={{ fontSize: "1.05rem", margin: "1.2rem 0 0.5rem" }}>近 14 天（每格为一天：上物理 / 下数学）</p>
+                <p className="panel__title" style={{ fontSize: "1.05rem", margin: "1.2rem 0 0.5rem" }}>近 14 天（每列一天，四点分别为 物/数/生/化）</p>
                 <div className="grid14">
                   {(stats.series ?? []).map((row) => (
                     <div key={row.date} className="cell" style={{ display: "grid", gap: "0.1rem" }}>
-                      <span data-v={row.physics ?? "none"} style={{ width: "0.55rem", height: "0.55rem", borderRadius: "50%", background: tone(row.physics, "physics") }} />
-                      <span data-v={row.math ?? "none"} style={{ width: "0.55rem", height: "0.55rem", borderRadius: "50%", background: tone(row.math, "math") }} />
+                      {SUBJECTS.map(({ key }) => (
+                        <span key={key} data-v={row[key] ?? "none"} style={{ width: "0.55rem", height: "0.55rem", borderRadius: "50%", background: tone(row[key], key) }} />
+                      ))}
                       <span>{Number(row.date.slice(8, 10))}</span>
                     </div>
                   ))}
@@ -408,7 +410,7 @@ export function App() {
       ) : null}
 
       <footer className="footnote">
-        概念 → 例题（对照分步解析）→ 练习 A/B（做完再看答案）→ 点一次打卡。物理约 6 分钟，数学约 6 分钟。
+        物理数学走「推导链」，生物化学走「概念图」。每天各科约 5–8 分钟：概念 → 停一下自己想 → 带走一句 → 打卡。
         <br />
         答案不自动判分，是为了让他自己发现错在哪一步。
       </footer>
@@ -417,7 +419,7 @@ export function App() {
 }
 
 function tone(status: CheckinStatus | null, subject: Subject) {
-  if (status === "done") return subject === "physics" ? "var(--physics)" : "var(--math)";
+  if (status === "done") return `var(--${subject})`;
   if (status === "shaky") return "var(--warn)";
   return "rgba(24,34,48,0.12)";
 }

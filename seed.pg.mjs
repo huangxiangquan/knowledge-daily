@@ -3,6 +3,8 @@
 import pg from "pg";
 import { physics } from "./seed-content-physics.mjs";
 import { math } from "./seed-content-math.mjs";
+import { biology } from "./seed-content-biology.mjs";
+import { chemistry } from "./seed-content-chemistry.mjs";
 
 const url = process.env.DB_URL || process.env.DATABASE_URL;
 if (!url) { console.error("DB_URL 未设置"); process.exit(2); }
@@ -16,7 +18,7 @@ const flat = (subject, days) => days.flatMap((d) => d.blocks.map((b) => ({
   day_num: d.day, subject, section: b.section, position: b.position ?? 1,
   title: b.title ?? "", body: b.body ?? "", answer: b.answer ?? null, terms: b.terms ?? null,
 })));
-const rows = [...flat("physics", physics), ...flat("math", math)];
+const rows = [...flat("physics", physics), ...flat("math", math), ...flat("biology", biology), ...flat("chemistry", chemistry)];
 
 pg.types.setTypeParser(1082, (v) => v); // DATE 保持 YYYY-MM-DD 字符串，避开 Date->UTC 平移
 const client = new pg.Client({ connectionString: url });

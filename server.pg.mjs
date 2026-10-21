@@ -20,7 +20,9 @@ const types = new Map([[".css", "text/css; charset=utf-8"], [".html", "text/html
   [".js", "text/javascript; charset=utf-8"], [".json", "application/json; charset=utf-8"],
   [".svg", "image/svg+xml"], [".png", "image/png"], [".ico", "image/x-icon"], [".woff2", "font/woff2"]]);
 
-const SUBS = new Set(["physics", "math"]);
+const SUBS = ["physics", "math", "biology", "chemistry"];
+const SUB_SET = new Set(SUBS);
+const ZH = { physics: "物理", math: "数学", biology: "生物", chemistry: "化学" };
 const STATUS = new Set(["done", "shaky"]);
 const APP_TZ = "Asia/Shanghai";
 const WEEK = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
@@ -38,17 +40,17 @@ async function loadDay(date) {
         order by subject, section, position`, [date]),
     q(`select subject,status from checkins where checkin_date=$1`, [date]),
   ]);
-  const subjects = { physics: [], math: [] };
+  const subjects = Object.fromEntries(SUBS.map((s) => [s, []]));
   let dayNum = null;
   for (const r of rows) {
-    if (subjects[r.subject]) subjects[r.subject].push({
+    if (SUB_SET.has(r.subject)) subjects[r.subject].push({
       subject: r.subject, section: r.section, position: Number(r.position), title: r.title,
       body: r.body, answer: r.answer, terms: r.terms,
     });
     if (dayNum === null && Number.isFinite(+r.day_num)) dayNum = Number(r.day_num);
   }
-  const status = { physics: null, math: null };
-  for (const c of checks) if (SUBS.has(c.subject)) status[c.subject] = c.status;
+  const status = Object.fromEntries(SUBS.map((s) => [s, null]));
+  for (const c of checks) if (SUB_SET.has(c.subject)) status[c.subject] = c.status;
   return { date, weekday: weekdayOf(date), day_num: dayNum, subjects, checkins: status };
 }
 
@@ -69,49 +71,52 @@ async function buildCalendar() {
     if (!byDate.has(d)) byDate.set(d, new Set());
     byDate.get(d).add(r.subject);
   }
-  const days = [...byDate.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([date, set]) => ({
-    date, weekday: weekdayOf(date), physics: set.has("physics"), math: set.has("math"),
-    physics_status: marks.get(date)?.physics ?? null, math_status: marks.get(date)?.math ?? null,
-  }));
+  const days = [...byDate.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([date, set]) => {
+    const has = Object.fromEntries(SUBS.map((s) => [s, set.has(s)]));
+    const st = Object.fromEntries(SUBS.map((s) => [s, marks.get(date)?.[s] ?? null]));
+    return { date, weekday: weekdayOf(date), has, status: st };
+  });
   return { first_day: days[0]?.date ?? null, today: todayISO(), days };
 }
 
 async function buildStats() {
   const cal = await buildCalendar();
   const days = cal.days.map((d) => d.date);
-  const grid = new Map(cal.days.map((d) => [d.date, { physics: d.physics_status, math: d.math_status }]));
+  const grid = new Map(cal.days.map((d) => [d.date, d]));
   const today = todayISO();
-  const daysCompleted = days.filter((d) => grid.get(d)?.physics && grid.get(d)?.math).length;
+  // 一天"完成" = 当天所有有卡片的学科都打了卡
+  const dayDone = (d) => SUBS.every((s) => !d.has[s] || d.status[s]);
+  const daysCompleted = cal.days.filter((d) => dayDone(d)).length;
   let streak = 0;
-  for (let i = days.length - 1; i >= 0; i -= 1) {
-    const d = days[i];
-    if (d > today) continue;
-    const g = grid.get(d) || {};
-    if (g.physics && g.math) streak += 1;
-    else if (d !== today) break;
+  for (let i = cal.days.length - 1; i >= 0; i -= 1) {
+    const d = cal.days[i];
+    if (d.date > today) continue;
+    if (dayDone(d)) streak += 1;
+    else if (d.date !== today) break;
   }
-  const shaky = cal.days.filter((d) => d.physics_status === "shaky" || d.math_status === "shaky");
+  const shaky = cal.days.flatMap((d) => SUBS.filter((s) => d.status[s] === "shaky").map((s) => ({ date: d.date, subject: s })));
   const topics = new Map();
   if (shaky.length) {
     const rows = await q(
       `select card_date, subject, title from cards where section='concept' and card_date = any($1::date[])`,
       [shaky.map((d) => d.date)]);
     const label = new Map(rows.map((r) => [`${asDate(r.card_date)}|${r.subject}`, r.title]));
-    for (const d of shaky) for (const s of ["physics", "math"]) {
-      if (d[`${s}_status`] !== "shaky") continue;
-      const t = label.get(`${d.date}|${s}`);
+    for (const d of shaky) {
+      const t = label.get(`${d.date}|${d.subject}`);
       if (!t) continue;
-      const k = `${s === "physics" ? "物理" : "数学"} · ${t}`;
+      const k = `${ZH[d.subject] ?? d.subject} · ${t}`;
       topics.set(k, (topics.get(k) ?? 0) + 1);
     }
   }
-  const shakyCount = cal.days.reduce((n, d) => n + (d.physics_status === "shaky" ? 1 : 0) + (d.math_status === "shaky" ? 1 : 0), 0);
+  const shakyCount = shaky.length;
   return {
     today, days_generated: days.length, first_day: cal.first_day, last_day: days.at(-1) ?? null,
     days_completed: daysCompleted, streak, shaky_count: shakyCount,
-
     weak_topics: [...topics.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6).map(([label, count]) => ({ label, count })),
-    series: days.slice(-14).map((d) => ({ date: d, physics: grid.get(d)?.physics ?? null, math: grid.get(d)?.math ?? null })),
+    series: cal.days.slice(-14).map((d) => ({
+      date: d.date,
+      ...Object.fromEntries(SUBS.map((s) => [s, d.status[s] ?? null])),
+    })),
   };
 }
 
@@ -142,7 +147,7 @@ async function api(req, res, url) {
     if (req.method === "POST" && p === "/api/checkin") {
       const body = await readBody(req);
       const date = valid(body.date) ?? todayISO();
-      if (!SUBS.has(body.subject) || !STATUS.has(body.status)) return json(res, 400, { error: "invalid_checkin" });
+      if (!SUB_SET.has(body.subject) || !STATUS.has(body.status)) return json(res, 400, { error: "invalid_checkin" });
       if (date > todayISO()) return json(res, 400, { error: "future_date" });
       const saved = await q(
         `insert into checkins (checkin_date, subject, status, updated_at) values ($1,$2,$3,now())

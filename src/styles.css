@@ -10,6 +10,10 @@
   --physics-tint: rgba(176, 61, 41, 0.08);
   --math: #1c6459;
   --math-tint: rgba(28, 100, 89, 0.08);
+  --biology: #3a6b2f;
+  --biology-tint: rgba(58, 107, 47, 0.08);
+  --chemistry: #5b4a8a;
+  --chemistry-tint: rgba(91, 74, 138, 0.08);
   --warn: #9a6a12;
   --serif: "Songti SC", "STSong", "Source Han Serif SC", "Noto Serif CJK SC", Georgia, "Times New Roman", serif;
   --sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", -apple-system, system-ui, sans-serif;
@@ -91,6 +95,8 @@ body {
 .strip__mark { width: 0.42rem; height: 0.42rem; border-radius: 50%; border: 1px solid var(--rule-strong); }
 .strip__mark[data-s="physics"][data-v="done"] { background: var(--physics); border-color: var(--physics); }
 .strip__mark[data-s="math"][data-v="done"] { background: var(--math); border-color: var(--math); }
+.strip__mark[data-s="biology"][data-v="done"] { background: var(--biology); border-color: var(--biology); }
+.strip__mark[data-s="chemistry"][data-v="done"] { background: var(--chemistry); border-color: var(--chemistry); }
 .strip__mark[data-v="shaky"] { background: rgba(154, 106, 18, 0.45); border-color: var(--warn); }
 
 /* -------------------------------- subjects ------------------------------ */
@@ -105,6 +111,8 @@ body {
 }
 .subject--physics { border-top: 4px solid var(--physics); }
 .subject--math { border-top: 4px solid var(--math); }
+.subject--biology { border-top: 4px solid var(--biology); }
+.subject--chemistry { border-top: 4px solid var(--chemistry); }
 .subject__head {
   display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem;
   padding: 0.85rem 1rem 0.6rem; border-bottom: 1px dashed var(--rule);
@@ -112,6 +120,8 @@ body {
 .subject__name { font-family: var(--serif); font-size: 1.5rem; margin: 0; letter-spacing: 0.02em; }
 .subject--physics .subject__name { color: var(--physics); }
 .subject--math .subject__name { color: var(--math); }
+.subject--biology .subject__name { color: var(--biology); }
+.subject--chemistry .subject__name { color: var(--chemistry); }
 .subject__en { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); }
 .subject__body { padding: 0.2rem 1rem 0.95rem; }
 
@@ -124,6 +134,8 @@ body {
 .block__label::before { content: ""; width: 0.5rem; height: 0.5rem; background: currentColor; border-radius: 1px; opacity: 0.5; }
 .block--physics .block__label { color: var(--physics); }
 .block--math .block__label { color: var(--math); }
+.block--biology .block__label { color: var(--biology); }
+.block--chemistry .block__label { color: var(--chemistry); }
 .block__title { font-family: var(--serif); font-size: 1.12rem; margin: 0 0 0.5rem; line-height: 1.35; }
 .terms { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0 0 0.6rem; padding: 0; list-style: none; }
 .terms li {
@@ -145,6 +157,8 @@ body {
 }
 .subject--physics .block--concept .prose > p:first-child::first-letter { color: var(--physics); }
 .subject--math .block--concept .prose > p:first-child::first-letter { color: var(--math); }
+.subject--biology .block--concept .prose > p:first-child::first-letter { color: var(--biology); }
+.subject--chemistry .block--concept .prose > p:first-child::first-letter { color: var(--chemistry); }
 
 details.reveal { margin-top: 0.7rem; border: 1px solid var(--rule); border-left: 3px solid var(--rule-strong); background: rgba(24, 34, 48, 0.025); }
 details.reveal summary {
@@ -175,6 +189,8 @@ details.reveal .reveal__inner { padding: 0.75rem; animation: fadein 0.28s ease b
 .checkin__actions button:disabled { opacity: 0.55; cursor: progress; }
 .subject--physics .checkin__actions button.is-active { background: var(--physics); border-color: var(--physics); color: #fff; }
 .subject--math .checkin__actions button.is-active { background: var(--math); border-color: var(--math); color: #fff; }
+.subject--biology .checkin__actions button.is-active { background: var(--biology); border-color: var(--biology); color: #fff; }
+.subject--chemistry .checkin__actions button.is-active { background: var(--chemistry); border-color: var(--chemistry); color: #fff; }
 
 /* -------------------------------- parent -------------------------------- */
 
